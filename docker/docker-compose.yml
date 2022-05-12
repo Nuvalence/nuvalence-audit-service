@@ -1,0 +1,12 @@
+version: '3.3'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: audituser
+      POSTGRES_PASSWORD: pwd123
+      POSTGRES_DB: audit

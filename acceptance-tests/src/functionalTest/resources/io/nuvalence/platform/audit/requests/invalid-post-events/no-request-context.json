@@ -1,0 +1,10 @@
+{
+  "summary": "this request has no request context",
+  "timestamp": "2021-12-18T02:58:56.000Z",
+  "eventData": {
+    "type": "StateChangeEventData",
+    "schema": "https://HUjnCisadkECgrSlZDNWIkp.qxTMyo6uZD,vCt.8s5.2MkZTU-hglwlX6nLK-Jdk-xzP0Byd3-gQVWqR7zW,REiJNcphfwuq0b1ZSVvqZw4",
+    "new_state": "{\"foo\": \"bar\"}",
+    "old_state": "{}"
+  }
+}

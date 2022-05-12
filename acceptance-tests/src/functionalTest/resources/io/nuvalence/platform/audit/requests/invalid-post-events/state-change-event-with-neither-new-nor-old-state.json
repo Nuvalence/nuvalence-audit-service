@@ -1,0 +1,10 @@
+{
+  "summary": "this state change event has neither new_state nor old_state",
+  "timestamp": "2021-12-18T02:58:56.000Z",
+  "eventData": {
+    "type": "StateChangeEventData"
+  },
+  "requestContext": {
+    "originatorId": "491abc7e-d7ec-35af-cea0-866f0da62a3d",
+  }
+}

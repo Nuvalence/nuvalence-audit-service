@@ -1,0 +1,12 @@
+{
+  "summary": "this event has no timestamp",
+  "eventData": {
+    "type": "StateChangeEventData",
+    "schema": "https://HUjnCisadkECgrSlZDNWIkp.qxTMyo6uZD,vCt.8s5.2MkZTU-hglwlX6nLK-Jdk-xzP0Byd3-gQVWqR7zW,REiJNcphfwuq0b1ZSVvqZw4",
+    "new_state": "{\"foo\": \"bar\"}",
+    "old_state": "{}"
+  },
+  "requestContext": {
+    "originatorId": "491abc7e-d7ec-35af-cea0-866f0da62a3d"
+  }
+}

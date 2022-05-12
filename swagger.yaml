@@ -1,0 +1,282 @@
+swagger: "2.0"
+info:
+  title: Nuvalence Audit Service
+  version: 1.0.0
+  description: >-
+    System of record for activities performed within a distributed system.
+
+
+    **Terminology**
+
+    - A **business object** describes a single domain object, with some logical type
+    (eg: user, document) on which system activities occur and will be audited.
+
+    - An **event** refers to any action occurring within the distributed system
+    which should be audited. The supported types of events are further enumerated
+    below.
+
+paths:
+  '/v1/audit/business-objects/{businessObjectType}/{id}/events':
+    parameters:
+      - name: businessObjectType
+        required: true
+        description: Type of business object.
+        in: path
+        type: string
+        pattern: ^[a-z][a-z-]{2,}$
+      - name: id
+        required: true
+        description: Unique identifier for a business object of the specified type.
+        in: path
+        type: string
+        format: uuid
+    get:
+      summary: Gets all audit events for the specified business object
+      operationId: getEvents
+      tags: ['Audit Events']
+      parameters:
+        - in: query
+          name: sortOrder
+          description: Controls whether results are returned in chronologically ascending or descending order.
+          required: false
+          default: ASC
+          type: string
+          enum:
+            - ASC
+            - DESC
+        - in: query
+          name: startTime
+          description: Specifies a start time (inclusive) for filtering results to events which occurred at or after the specified time.
+          required: false
+          type: string
+          format: date-time
+        - in: query
+          name: endTime
+          description: Specifies a end time (exclusive)for filtering results to events which occurred before the specified time.
+          required: false
+          type: string
+          format: date-time
+        - in: query
+          name: pageNumber
+          description: Results page number
+          type: integer
+          minimum: 0
+          default: 0
+        - in: query
+          name: pageSize
+          description: Results page number
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+      responses:
+        '200':
+          description: The paged set of audited events related to this business object.
+          schema:
+            $ref: '#/definitions/AuditEventsPage'
+        '400':
+          description: Invalid request param(s).
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    post:
+      summary: Creates an audit event for the specified business object
+      operationId: postEvent
+      tags: ['Audit Events']
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AuditEventRequest'
+      responses:
+        '201':
+          description: The event was created.
+          schema:
+            $ref: '#/definitions/AuditEventId'
+        '202':
+          description: The event was accepted, be created asynchronously.
+          schema:
+            $ref: '#/definitions/AuditEventId'
+        '400':
+          description: Invalid request body.
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        default:
+          description: Default response
+definitions:
+  AuditEventsPage:
+    description: Paged response detailing a collection of audit events.
+    type: object
+    required:
+      - events
+      - pagingMetadata
+    properties:
+      events:
+        type: array
+        items:
+          $ref: "#/definitions/AuditEvent"
+      pagingMetadata:
+        $ref: "#/definitions/PagingMetadata"
+  AuditEventId:
+    type: object
+    required:
+      - eventId
+    properties:
+      eventId:
+        type: string
+        format: uuid
+        description: Unique (across all business objects) identifier of the audit event.
+  AuditEvent:
+    type: object
+    required:
+      - businessObject
+    properties:
+      businessObject:
+        $ref: '#/definitions/BusinessObjectMetadata'
+    allOf:
+      - $ref: '#/definitions/AuditEventRequest'
+      - $ref: '#/definitions/AuditEventId'
+  BusinessObjectMetadata:
+    type: object
+    required:
+      - id
+      - type
+    properties:
+      id:
+        type: string
+        format: uuid
+      type:
+        type: string
+        pattern: ^[a-z][a-z-]{2,}$
+  AuditEventRequest:
+    description: Request payload for creating an audit event.
+    type: object
+    required:
+      - timestamp
+      - eventData
+      - summary
+    properties:
+      eventData:
+        $ref: '#/definitions/AuditEventDataBase'
+      timestamp:
+        type: string
+        format: date-time
+      summary:
+        type: string
+        description: Plain text summary of the event which occurred, for the purpose of creating human user friendly views of the data.
+      links:
+        $ref: '#/definitions/AuditEventLinks'
+      requestContext:
+        $ref: '#/definitions/RequestContext'
+  AuditEventDataBase:
+    description: Base properties for polymorphic event data.
+    type: object
+    discriminator: type
+    required:
+      - type
+    properties:
+      schema:
+        type: string
+        description: Location (URI) of schema defining structure of enclosed data. Specifying a schema is currently optional and the enclosed data is not validated at time of ingestion.
+      type:
+        type: string
+        enum:
+          - StateChangeEventData
+          - ActivityEventData
+  StateChangeEventData:
+    description: An audit event which indicates an business object's state has changed.
+    type: object
+    properties:
+      newState:
+        type: string
+        description: The new state of the business object data. May be null or undefined if this state change is to indicate business object deletion.
+        maxLength: 2048
+      oldState:
+        type: string
+        description: The old state of the business object data. May be null or undefined if this state change is to indicate business object creation.
+        maxLength: 2048
+    allOf:
+      - $ref: '#/definitions/AuditEventDataBase'
+  ActivityEventData:
+    description: An audit event which indicates some activity ocurred on some business object.
+    type: object
+    required:
+      - activityType
+      - data
+    properties:
+      activityType:
+        type: string
+        description: A low cardinality activity type describing the activity which occurred.
+      data:
+        type: string
+        description: Free-form data relevant to this activity.
+        maxLength: 4096
+    allOf:
+      - $ref: '#/definitions/AuditEventDataBase'
+  AuditEventLinks:
+    type: object
+    properties:
+      systemOfRecord:
+        type: string
+        description: Link to the business object itself within its own system of record.
+      relatedBusinessObjects:
+        type: array
+        items:
+          type: string
+          description: Link to the audit results for a related business object.
+  RequestContext:
+    description: Contextual metadata for the request which triggered an event to occur.
+    type: object
+    required:
+      - originatorId
+    properties:
+      userId:
+        type: string
+        format: uuid
+        description: "The user identifier associated with this event; may be null or undefined if the event occurs completely asynchronously via a backend such that there is no associated user."
+      tenantId:
+        type: string
+        format: uuid
+        description: "The user identifier associated with this event; may be null or undefined if the system is entirely single tenanted or if the event occurs completely asynchronously via a backend such that there is no associated user."
+      originatorId:
+        type: string
+        format: uuid
+        description: "The identifier of the immediate requester/originator (may be a system or a user) of the event being audited. This must be provided, for scheduled background tasks, use the identifier for the system performing the task."
+      requestId:
+        type: string
+        format: uuid
+        description: "The request identifier for the request originating the event."
+      traceId:
+        type: string
+        format: uuid
+        description: "The request identifier for the trace containing the creation of the event."
+      spanId:
+        type: string
+        format: uuid
+        description: "The request identifier for the trace containing the creation of the event."
+  PagingMetadata:
+    description: Paging metadata in accordance with https://datatracker.ietf.org/doc/html/rfc8977
+    type: object
+    properties:
+      totalCount:
+        type: integer
+        format: int64
+        minimum: 0
+      pageSize:
+        type: integer
+        minimum: 0
+        maximum: 200
+      pageNumber:
+        type: integer
+        minimum: 0
+      nextPage:
+        type: string
+  ErrorResponse:
+    description: Used when REST api returns an error.
+    type: object
+    properties:
+      errorMessage:
+        type: string
+        description: "Human readable error message."
+produces:
+  - application/json

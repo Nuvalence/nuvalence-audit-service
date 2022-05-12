@@ -1,0 +1,87 @@
+plugins {
+    id 'java'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'com.github.spotbugs'
+    id 'pmd'
+    id 'com.diffplug.spotless'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+apply from: "${rootDir}/gradle/code-quality.gradle"
+
+repositories {
+    mavenCentral()
+}
+
+def cucumberVersion = '6.10.4'
+def junitVersion = '5.7.2'
+
+
+configurations {
+    functionalTestImplementation
+    functionalTestCompileOnly.extendsFrom functionalTestAnnotationProcessor
+}
+
+dependencies {
+    functionalTestAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    functionalTestCompileOnly 'com.google.code.findbugs:annotations:3.0.1'
+
+    functionalTestImplementation project(":client")
+
+    functionalTestImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    functionalTestImplementation "io.cucumber:cucumber-junit-platform-engine:${cucumberVersion}"
+    functionalTestImplementation "io.cucumber:cucumber-picocontainer:${cucumberVersion}"
+
+    functionalTestImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    functionalTestImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+
+    functionalTestImplementation 'org.hamcrest:hamcrest-junit:2.0.0.0'
+
+    functionalTestImplementation 'org.awaitility:awaitility:3.0.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    functionalTest {
+        java {}
+    }
+}
+
+task functionalTest(type: Test) {
+    def testConfig = new Properties()
+    def configFile = file("configuration.properties")
+
+    if (configFile.exists()) {
+        configFile.withInputStream { testConfig.load(it) }
+    }
+
+    doFirst {
+        println "starting functional tests at: " + System.currentTimeMillis()
+    }
+
+    description = 'Runs the functional tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+    useJUnitPlatform()
+    testLogging.showStandardStreams = true
+
+    if (testConfig.containsKey('url')) {
+        environment 'SERVICE_URI', testConfig.getProperty('url')
+    }
+    if (testConfig.containsKey('authorization')) {
+        environment 'AUTHORIZATION', testConfig.getProperty('authorization')
+    }
+
+    doLast {
+        println "completing functional tests at: " + System.currentTimeMillis()
+    }
+}

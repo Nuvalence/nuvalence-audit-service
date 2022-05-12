@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+    <suppress>
+        <!-- there's a patch for this in netty but not yet for the google pub/sub library which pulls it in -->
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty-.*@4\.1\.51\.Final$</packageUrl>
+        <cpe>cpe:/a:netty:netty</cpe>
+    </suppress>
+</suppressions>

@@ -1,0 +1,61 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.7'
+	id 'io.spring.dependency-management' version '1.0.0.RELEASE'
+	id 'java'
+	id 'com.google.cloud.tools.jib'
+	id 'checkstyle'
+	id 'jacoco'
+	id 'com.github.spotbugs'
+	id 'pmd'
+	id 'com.diffplug.spotless'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+apply from: "${rootDir}/gradle/openapi-tools/server.gradle"
+apply from: "${rootDir}/gradle/code-quality.gradle"
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+def mapstructVersion = '1.4.2.Final'
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.liquibase:liquibase-core'
+	runtimeOnly 'org.postgresql:postgresql'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor('org.hibernate:hibernate-jpamodelgen')
+	compileOnly 'com.google.code.findbugs:annotations:3.0.1'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.assertj:assertj-core:3.21.0'
+	testRuntimeOnly 'com.h2database:h2'
+	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-pubsub:1.2.8.RELEASE'
+	implementation 'org.springframework.integration:spring-integration-core'
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs = [
+			'-Amapstruct.suppressGeneratorTimestamp=true'
+	]
+}
+
+test {
+	useJUnitPlatform()
+	testLogging.showStandardStreams = true
+}

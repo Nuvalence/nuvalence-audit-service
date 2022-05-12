@@ -1,0 +1,78 @@
+<mxfile host="app.diagrams.net" modified="2021-12-23T17:19:51.743Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36" etag="2GWb_FsGw1Itkb3x52v4" version="16.0.0" type="github">
+  <diagram id="mpUjUOVUH8NIsESwNF4q" name="Page-1">
+    <mxGraphModel dx="1298" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="dgMd6p3KeX1wIhPRKkx2-5" target="dgMd6p3KeX1wIhPRKkx2-9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-26" value="queue events to be persisted" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="dgMd6p3KeX1wIhPRKkx2-20" vertex="1" connectable="0">
+          <mxGeometry x="0.52" y="2" relative="1" as="geometry">
+            <mxPoint x="-38" y="-18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="dgMd6p3KeX1wIhPRKkx2-5" target="dgMd6p3KeX1wIhPRKkx2-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-25" value="persist and query&lt;br&gt;audit events&amp;nbsp;" style="edgeLabel;html=1;align=right;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="dgMd6p3KeX1wIhPRKkx2-21" vertex="1" connectable="0">
+          <mxGeometry x="-0.25" y="3" relative="1" as="geometry">
+            <mxPoint x="-8" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-5" value="" style="strokeColor=#dddddd;shadow=1;strokeWidth=1;rounded=1;absoluteArcSize=1;arcSize=2;" parent="1" vertex="1">
+          <mxGeometry x="150" y="520" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-6" value="&lt;font color=&quot;#000000&quot;&gt;audit-service&lt;/font&gt;&lt;br&gt;Cloud Run" style="sketch=0;dashed=0;connectable=0;html=1;fillColor=#5184F3;strokeColor=none;shape=mxgraph.gcp2.hexIcon;prIcon=cloud_run;part=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=5;fontColor=#999999;fontSize=12;" parent="dgMd6p3KeX1wIhPRKkx2-5" vertex="1">
+          <mxGeometry y="0.5" width="44" height="39" relative="1" as="geometry">
+            <mxPoint x="5" y="-19.5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-7" value="" style="strokeColor=#dddddd;shadow=1;strokeWidth=1;rounded=1;absoluteArcSize=1;arcSize=2;" parent="1" vertex="1">
+          <mxGeometry x="150" y="660" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-8" value="&lt;font color=&quot;#000000&quot;&gt;audit&lt;/font&gt;&lt;br&gt;Cloud SQL" style="sketch=0;dashed=0;connectable=0;html=1;fillColor=#5184F3;strokeColor=none;shape=mxgraph.gcp2.hexIcon;prIcon=cloud_sql;part=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=5;fontColor=#999999;fontSize=12;" parent="dgMd6p3KeX1wIhPRKkx2-7" vertex="1">
+          <mxGeometry y="0.5" width="44" height="39" relative="1" as="geometry">
+            <mxPoint x="5" y="-19.5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;fontSize=12;" parent="1" source="dgMd6p3KeX1wIhPRKkx2-9" target="dgMd6p3KeX1wIhPRKkx2-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-28" value="receive events" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" parent="dgMd6p3KeX1wIhPRKkx2-27" vertex="1" connectable="0">
+          <mxGeometry x="-0.1407" y="2" relative="1" as="geometry">
+            <mxPoint y="13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-9" value="" style="strokeColor=#dddddd;shadow=1;strokeWidth=1;rounded=1;absoluteArcSize=1;arcSize=2;" parent="1" vertex="1">
+          <mxGeometry x="500" y="520" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-10" value="&lt;font color=&quot;#000000&quot;&gt;event-queue&lt;/font&gt;&lt;br&gt;Cloud Pub/Sub" style="sketch=0;dashed=0;connectable=0;html=1;fillColor=#5184F3;strokeColor=none;shape=mxgraph.gcp2.hexIcon;prIcon=cloud_pubsub;part=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=5;fontColor=#999999;fontSize=12;" parent="dgMd6p3KeX1wIhPRKkx2-9" vertex="1">
+          <mxGeometry y="0.5" width="44" height="39" relative="1" as="geometry">
+            <mxPoint x="5" y="-19.5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="dgMd6p3KeX1wIhPRKkx2-17" target="dgMd6p3KeX1wIhPRKkx2-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-22" value="create and retrieve audit events&lt;br&gt;for business domain objects" style="edgeLabel;html=1;align=right;verticalAlign=middle;resizable=0;points=[];" parent="dgMd6p3KeX1wIhPRKkx2-16" vertex="1" connectable="0">
+          <mxGeometry x="-0.25" y="-2" relative="1" as="geometry">
+            <mxPoint x="-3" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-19" value="" style="group" parent="1" vertex="1" connectable="0">
+          <mxGeometry x="150" y="380" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-17" value="client" style="strokeColor=#dddddd;shadow=1;strokeWidth=1;rounded=1;absoluteArcSize=1;arcSize=2;container=0;spacingLeft=60;" parent="dgMd6p3KeX1wIhPRKkx2-19" vertex="1">
+          <mxGeometry width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-13" value="" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.mscae.enterprise.client_application" parent="dgMd6p3KeX1wIhPRKkx2-19" vertex="1">
+          <mxGeometry x="12.5" y="14" width="50" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="dgMd6p3KeX1wIhPRKkx2-24" value="This topic is here for durability of events. The audit service will be both the publisher and consumer of these events.&amp;nbsp;&amp;nbsp;" style="shape=note;strokeWidth=2;fontSize=12;size=11;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#666600;align=left;spacingLeft=0;spacingTop=0;spacing=10;spacingBottom=0;spacingRight=0;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="500" y="600" width="200" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <Match>
+        <!-- openapi generated -->
+        <Source name="~.*/generate-resources/.*" />
+    </Match>=
+    <Match>
+        <!-- generated mapper implementations -->
+        <Source name="~.*/.*MapperImpl.java" />
+    </Match>
+    <!-- generated entities -->
+    <Match classregex="io\.nuvalence\.platform\.audit\.service\.domain\..+_" />
+    <Match classregex=".*(Test|StepDefinitions)">
+        <!-- ignore these codes in tests -->
+        <Bug code="EI2" />
+    </Match>
+</FindBugsFilter>

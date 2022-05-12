@@ -1,0 +1,83 @@
+/**
+ * REQUIRES PLUGINS: checkstyle, spotless, jacoco, spotbugs, pmd
+ */
+
+/**
+ * code style
+ */
+
+checkstyle {
+    toolVersion '8.25'
+}
+
+spotless {
+    java {
+        googleJavaFormat('1.8').aosp()
+        toggleOffOn('/**', '*/') // don't reformat javadocs
+        importOrder('', 'java', 'javax')
+        targetExclude('**/generate-resources/**')
+    }
+}
+
+/**
+ * code coverage
+ */
+
+test.finalizedBy jacocoTestReport
+
+def excludeGenerated(ConfigurableFileCollection collection) {
+    collection.setFrom(files(collection.files.collect {
+        fileTree(dir: it.absolutePath, exclude: ['**/generated/**', '**/RFC3339DateFormat.class', '**/OpenAPI2SpringBoot*.class'])
+    }))
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    afterEvaluate {
+        excludeGenerated(classDirectories)
+    }
+}
+
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        excludeGenerated(classDirectories)
+    }
+
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.9
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
+
+/**
+ * static code analysis
+ */
+
+spotbugs {
+    excludeFilter = file("${rootDir}/config/spotbugs/excludes.xml")
+}
+
+
+pmd {
+    pmdMain {
+        source = fileTree('src')
+    }
+}
+
+/**
+ * security
+ */
+
+apply plugin: 'org.owasp.dependencycheck'
+
+dependencyCheck {
+    failBuildOnCVSS = 7
+    skipConfigurations = ['checkstyle', 'testImplementation', 'functionalTestImplementation']
+    suppressionFile = "${rootDir}/config/owasp/suppressions.xml"
+}

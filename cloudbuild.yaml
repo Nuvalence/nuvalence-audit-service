@@ -1,0 +1,46 @@
+steps:
+  # Build and push the image
+  - name: 'gradle:7.3.1-jdk11'
+    id: build
+    entrypoint: gradle
+    args:
+      - clean
+      - build
+      - jib
+      - '--image'
+      - '$_GCR_HOSTNAME/$PROJECT_ID/$_REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+  # Deploy
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: deploy
+    entrypoint: bash
+    args: 
+      - '-c'
+      - |
+        gcloud run deploy $_SERVICE_NAME \
+          --image $_GCR_HOSTNAME/$PROJECT_ID/$_REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA \
+          --region $_DEPLOY_REGION \
+          --vpc-connector vpcconn \
+          --set-env-vars "SPRING_DATASOURCE_URL=jdbc:postgresql://$_DB_ADDRESS:$_DB_PORT/$$DB_NAME" \
+          --set-env-vars "SPRING_DATASOURCE_USERNAME=$$DB_USER" \
+          --set-env-vars "SPRING_DATASOURCE_PASSWORD=$$DB_PASSWORD"
+    secretEnv: 
+      - DB_USER
+      - DB_PASSWORD
+      - DB_NAME
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/db_pass/versions/latest
+      env: 'DB_PASSWORD'
+    - versionName: projects/$PROJECT_ID/secrets/db_user/versions/latest
+      env: 'DB_USER'
+    - versionName: projects/$PROJECT_ID/secrets/db_name/versions/latest
+      env: 'DB_NAME'
+options:
+  substitutionOption: ALLOW_LOOSE
+substitutions:
+  _DEPLOY_REGION: us-east4
+  _GCR_HOSTNAME: us.gcr.io
+  _SERVICE_NAME: your-audit-service-name # update with GCP service name
+  _REPO_NAME: your-audit-service-repo # update with GCP repo name
+  _DB_ADDRESS: 172.18.0.2
+  _DB_PORT: '5432'

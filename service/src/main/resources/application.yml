@@ -1,0 +1,39 @@
+spring:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/audit
+    username: audituser
+    password: pwd123
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.xml
+  cloud.gcp:
+    project-id: your-gcp-project-id # update with your gcp project name
+    pubsub.topic: topic-audit-events
+    pubsub.subscription: sub-audit-events
+    pubsub.enable: true
+  jackson:
+    serialization:
+      write-dates-with-zone-id: true
+      write-dates-as-timestamps: false
+    deserialization:
+      adjust_dates_to_context_time-zone: false
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+

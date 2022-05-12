@@ -1,0 +1,24 @@
+{
+  "@class": "io.nuvalence.platform.audit.service.domain.ActivityEventEntity",
+  "businessObjectId": "1190241c-5eae-11ec-bf63-0242ac130002",
+  "businessObjectType": "orders",
+  "schema": "http://zJ.igamhWbkrKjK2Q5JtEHGodEFnBT5uWoXF1",
+  "type": "ActivityEventData",
+  "activityType": "db query",
+  "data": "find all records",
+  "timestamp": "1998-10-26T06:56:40.159-05:00",
+  "summary": "sed ipsum in ex",
+  "systemOfRecord": "https://kntDagxbbZucajWLysFfIA.hdunHxOWkxzEGSH3lkTDnig+Kl0Tf,0QVyBEsgnUN7JVhDXkU6cnzq0kV1+hhLfk.fv3EZPDBL,48tZE",
+  "relatedBusinessObjects": [
+    "http://aCiphnvpqwqVWbWfE.drrl0PfCVa-vEiGvE7XzdiNAfdgkxISOQOZgcBMyTmx1uETjHDWbhxPuZiu.XV4mF",
+    "http://dpGiJWlztONhzhIm.jpoylxviXN6TGIB2UgqxMyTH2ryCq.H4uFPTvJ"
+  ],
+  "requestContext": {
+    "userId": "f3e415b2-ae4c-c251-2c47-3a09932d112f",
+    "tenantId": "bd3c6991-25d4-f3f7-1f88-0678a76d9383",
+    "originatorId": "2b525d80-286d-ec4f-3dc5-df2d1713bad6",
+    "requestId": "4bfb56d2-6790-1ac0-f80e-5317fed89aee",
+    "traceId": "90a8f8d7-7345-2840-ad0c-b1b09b481e1d",
+    "spanId": "85410150-48b0-7a78-d329-81943e74a5d2"
+  }
+}

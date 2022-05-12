@@ -1,0 +1,67 @@
+logsBucket: "gs://${_ARTIFACT_BUCKET_NAME}/cloudbuild-logs/app-pull-trigger"
+timeout: 1800s # 30m timeout to allow for pulling latest changes to NVD
+steps:
+  - id: 'tf init'
+    name: 'hashicorp/terraform:1.0.0'
+    dir: "${_WORKSTREAM_PATH}"
+    entrypoint: 'sh'
+    args:
+    - '-c'
+    - |
+      env=${env#*/}
+      echo ""
+      echo "*************** TERRAFORM INIT ******************"
+      echo "******* At environment: ${_WORKSTREAM_PATH} **********"
+      echo "*************************************************"
+      terraform init || exit 1
+
+  - id: 'tf validate'
+    name: 'hashicorp/terraform:1.0.0'
+    dir: "${_WORKSTREAM_PATH}"
+    entrypoint: 'sh'
+    args:
+    - '-c'
+    - |
+      env=${env#*/}
+      echo ""
+      echo "*************** TERRAFORM VALIDATE ******************"
+      echo "******* At environment: ${_WORKSTREAM_PATH} **************"
+      echo "*****************************************************"
+      terraform validate || exit 1
+
+  - id: 'tf plan'
+    name: 'hashicorp/terraform:1.0.0'
+    dir: "${_WORKSTREAM_PATH}"
+    entrypoint: 'sh'
+    args:
+    - '-c'
+    - |
+      env=${env#*/}
+      echo ""
+      echo "*************** TERRAFORM PLAN ******************"
+      echo "******* At environment: ${_WORKSTREAM_PATH} **********"
+      echo "*************************************************"
+      terraform plan -lock=false -input=false || exit 1
+
+  - id: get cached build artifacts
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        gsutil -m cp gs://${PROJECT_ID}-cloudbuild-artifacts/gradle-user-home.tar.gz .
+        tar -zxf gradle-user-home.tar.gz
+
+  - id: build
+    name: 'gradle:7.3.1-jdk11'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        echo ""
+        echo "**************** GRADLE BUILD *******************"
+        echo "*************************************************"
+        ./gradlew clean build dependencyCheckAnalyze
+    env:
+      - 'GRADLE_USER_HOME=/workspace/.build-caches/.gradle'
+      - 'GRADLE_OPTS="-Dorg.gradle.daemon=false"'
