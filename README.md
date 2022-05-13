@@ -28,7 +28,15 @@ not to edit or remove them.
 
 The Audit Service is a platform component. It should be very opinionated about a small set of 
 required data fields (the header) and unopinionated about the majority of the record (the body). 
-The implication of this is that the service should be able to manage
+The implication of this is that the service should be able to manage.
+
+## Contributors
+The Nuvalence Audit Service was originally a private project with contributions from:
+- [@lnavarette](https://github.com/lnavarette)
+- [@davidkiss-nuvalence](https://github.com/davidkiss-nuvalence)
+- [@franklincm](https://github.com/franklincm)
+- [@404htm](https://github.com/404htm)
+- [@jimmie-potts](https://github.com/jimmie-potts)
 
 ### Further Documentation
 
